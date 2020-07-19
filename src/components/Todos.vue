@@ -13,7 +13,7 @@
     <div class="todos">
       <div 
         @dblclick="onDblClick(todo)" 
-        v-for="todo in allTodos" 
+        v-for="todo in data_todos" 
         :key="todo.id" 
         class="todo"
         v-bind:class="{'is-complete':todo.completed}">
@@ -28,6 +28,9 @@
   import { mapGetters, mapActions } from 'vuex';
   export default {
     name: "Todos",
+    props: {
+      data_todos: {},
+    },
     methods: {
       ...mapActions(['fetchTodos', 'deleteTodo', 'updateTodo']),
       onDblClick(todo) {
