@@ -35,6 +35,7 @@ export default {
       paginations: {
         totalPages: 0,
         currentPage: 1,
+        totalVisible: 7,
       },
     }
   },
@@ -42,38 +43,23 @@ export default {
     ...mapActions(['fetchTodos']),
 
     nextPage: function() {
-      let start = (this.paginations.currentPage - 1)*10;
-      let end = start + 10;
+      let start = (this.paginations.currentPage - 1)*9;
+      let end = start + 9;
       this.data_todos = this.allTodos.slice(start,end);
     },
   },
   computed: {
     ...mapGetters(['allTodos']),
-
-    first_data: {
-      get() {
-        return this.allTodos.slice(0,20);
-      },
-      set(value) {
-        this.data_todos = value;
-      }
-    },
-    total_pages: {
-      get() {
-        return Math.ceil(this.allTodos.length/10);
-      },
-      set(value) {
-        this.paginations.totalPages = value;
-      }
-    }
   },
   created() {
     this.fetchTodos();
   },
-	beforeMount: function() {
-    this.data_todos = this.first_data;
-    this.paginations.totalPages = this.total_pages;
-	},
+  watch: {
+    allTodos(newData) {
+      this.paginations.totalPages = Math.ceil(newData.length/9);
+      this.data_todos = newData.slice(0,9);
+    }
+  }
 }
 </script>
 

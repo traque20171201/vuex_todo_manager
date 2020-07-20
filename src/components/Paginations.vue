@@ -8,7 +8,7 @@
               v-model="paginations.currentPage"
               class="my-4"
               :length="paginations.totalPages"
-              :totalVisible="totalVisible"
+              :totalVisible="paginations.totalVisible"
               @input="$emit('nextPage')"
             ></v-pagination>
           </v-container>
