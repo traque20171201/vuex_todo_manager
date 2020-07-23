@@ -41,7 +41,16 @@ const actions = {
     const response = await axios.put(`https://jsonplaceholder.typicode.com/todos/${updTodo.id}`, updTodo);
 
     commit('updateTodo', response.data);
-  }
+  },
+  //確認用ダイアログ
+  async confirm_dialog(msg) {
+    let confirmed = window.confirm(msg);
+    if (confirmed) {
+      return true;
+    } else {
+      throw new Error();
+    }
+  },
 };
 
 const mutations = {

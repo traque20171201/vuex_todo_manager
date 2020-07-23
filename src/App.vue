@@ -11,6 +11,12 @@
         @nextPage="nextPage"
       />
     </div>
+    <div class="container">
+      <TableTodos
+        :todos.sync="data_todos"
+        @update_completed="update_completed"
+      />
+    </div>
   </div>
 </template>
 
@@ -20,6 +26,7 @@ import Todos from './components/Todos.vue'
 import AddTodo from './components/AddTodo.vue'
 import FilterTodos from './components/FilterTodos.vue'
 import Paginations from './components/Paginations.vue'
+import TableTodos from './components/TableTodos.vue'
 
 export default {
   name: 'App',
@@ -27,7 +34,8 @@ export default {
     Todos,
     AddTodo,
     FilterTodos,
-    Paginations
+    Paginations,
+    TableTodos
   },
   data() {
     return {
@@ -40,13 +48,23 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchTodos']),
+    ...mapActions(['fetchTodos','confirm_dialog']),
 
     nextPage: function() {
-      let start = (this.paginations.currentPage - 1)*9;
-      let end = start + 9;
-      this.data_todos = this.allTodos.slice(start,end);
+      this.confirm_dialog('are you sure next page?')
+        .then(() => {
+          let start = (this.paginations.currentPage - 1)*9;
+          let end = start + 9;
+          this.data_todos = this.allTodos.slice(start,end);
+        })
+        .catch(() => {
+          //なにかキャンセル後に入れたい処理があれば
+        });
     },
+
+    update_completed(index) {
+      this.data_todos[index].completed = true;
+    }
   },
   computed: {
     ...mapGetters(['allTodos']),
